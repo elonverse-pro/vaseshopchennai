@@ -35,6 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // Quick view gives an accessible, useful product action without a heavy modal.
   $$('.quick-view').forEach(button => button.addEventListener('click', e => { const name = e.target.closest('.product-card').dataset.name; notify(`${name} · Details opening soon.`); }));
 
+  // A dense, image-first top collection. Product data is generated locally so the
+  // page stays fast while still providing a full 100-item browsing experience.
+  const flavours = ['Arctic Berry', 'Citrus Mango', 'Grape Frost', 'Watermelon Mint', 'Blue Razz Ice', 'Peach Lychee', 'Kiwi Melon', 'Cherry Cola', 'Lemon Lime', 'Blackcurrant Ice', 'Tropical Punch', 'Strawberry Mint', 'Passionfruit Ice', 'Apple Peach', 'Berry Blast', 'Mango Guava', 'Raspberry Ice', 'Coconut Melon', 'Pineapple Citrus', 'Minty Grape'];
+  const types = ['disposable', 'pod', 'salt'];
+  const collection = Array.from({ length: 100 }, (_, index) => {
+    const type = types[index % types.length];
+    return { id: index + 1, type, flavour: flavours[index % flavours.length], name: `Vape CHN ${type === 'pod' ? 'Pulse Pod' : type === 'salt' ? 'Reserve Salt' : 'Aura'} · ${flavours[index % flavours.length]}`, price: type === 'pod' ? 2499 : type === 'salt' ? 899 : 1899, position: ['0% 0%', '100% 0%', '0% 100%', '100% 100%'][index % 4] };
+  });
+  const catalogueGrid = $('#catalogue-grid');
+  const renderCatalogue = filter => {
+    const products = filter === 'all' ? collection : collection.filter(item => item.type === filter);
+    catalogueGrid.innerHTML = products.map(item => `<article class="catalogue-item" data-name="${item.name}" data-price="${item.price}"><div class="catalogue-visual" style="--image-position:${item.position}"><span class="catalogue-number">#${String(item.id).padStart(3, '0')}</span><button class="catalogue-add" aria-label="Add ${item.name} to cart">+</button></div><h3>${item.name}</h3><div class="catalogue-meta"><span>${item.type} · ${item.flavour}</span><b>₹${item.price.toLocaleString('en-IN')}</b></div></article>`).join('');
+    $$('.catalogue-add', catalogueGrid).forEach(button => button.addEventListener('click', event => { const item = event.target.closest('.catalogue-item'); cart.push({ name: item.dataset.name, price: Number(item.dataset.price) }); updateCart(); notify(`${item.dataset.name} added to your bag.`); }));
+  };
+  renderCatalogue('all');
+  $$('.catalogue-filter').forEach(button => button.addEventListener('click', () => { $$('.catalogue-filter').forEach(item => item.classList.remove('active')); button.classList.add('active'); renderCatalogue(button.dataset.filter); }));
+
   // Search overlay
   const search = $('.search-modal');
   $('.search-trigger').addEventListener('click', () => { search.classList.add('open'); search.setAttribute('aria-hidden', 'false'); $('input', search).focus(); });
