@@ -39,18 +39,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // page stays fast while still providing a full 100-item browsing experience.
   const flavours = ['Arctic Berry', 'Citrus Mango', 'Grape Frost', 'Watermelon Mint', 'Blue Razz Ice', 'Peach Lychee', 'Kiwi Melon', 'Cherry Cola', 'Lemon Lime', 'Blackcurrant Ice', 'Tropical Punch', 'Strawberry Mint', 'Passionfruit Ice', 'Apple Peach', 'Berry Blast', 'Mango Guava', 'Raspberry Ice', 'Coconut Melon', 'Pineapple Citrus', 'Minty Grape'];
   const types = ['disposable', 'pod', 'salt'];
-  const collection = Array.from({ length: 100 }, (_, index) => {
+  const defaultCollection = Array.from({ length: 100 }, (_, index) => {
     const type = types[index % types.length];
-    return { id: index + 1, type, flavour: flavours[index % flavours.length], name: `Vape CHN ${type === 'pod' ? 'Pulse Pod' : type === 'salt' ? 'Reserve Salt' : 'Aura'} · ${flavours[index % flavours.length]}`, price: type === 'pod' ? 2499 : type === 'salt' ? 899 : 1899, position: ['0% 0%', '100% 0%', '0% 100%', '100% 100%'][index % 4] };
+    return { id: index + 1, type, flavour: flavours[index % flavours.length], name: `Vape CHN ${type === 'pod' ? 'Pulse Pod' : type === 'salt' ? 'Reserve Salt' : 'Aura'} · ${flavours[index % flavours.length]}`, price: type === 'pod' ? 2499 : type === 'salt' ? 899 : 1899, position: ['0% 0%', '100% 0%', '0% 100%', '100% 100%'][index % 4], image: '' };
   });
+  let collection;
+  try { collection = JSON.parse(localStorage.getItem('vapeChnProducts')) || defaultCollection; } catch { collection = defaultCollection; }
+  let storeSettings;
+  try { storeSettings = JSON.parse(localStorage.getItem('vapeChnSettings')) || { storeName: 'Vape Shop Chennai', whatsapp: '919000000000', call: '+91 90000 00000' }; } catch { storeSettings = { storeName: 'Vape Shop Chennai', whatsapp: '919000000000', call: '+91 90000 00000' }; }
   const catalogueGrid = $('#catalogue-grid');
   const renderCatalogue = filter => {
     const products = filter === 'all' ? collection : collection.filter(item => item.type === filter);
-    catalogueGrid.innerHTML = products.map(item => `<article class="catalogue-item" data-name="${item.name}" data-price="${item.price}"><div class="catalogue-visual" style="--image-position:${item.position}"><span class="catalogue-number">#${String(item.id).padStart(3, '0')}</span><button class="catalogue-add" aria-label="Add ${item.name} to cart">+</button></div><h3>${item.name}</h3><div class="catalogue-meta"><span>${item.type} · ${item.flavour}</span><b>₹${item.price.toLocaleString('en-IN')}</b></div></article>`).join('');
+    catalogueGrid.innerHTML = products.map(item => `<article class="catalogue-item" data-name="${item.name}" data-price="${item.price}"><div class="catalogue-visual ${item.image ? 'custom-product-image' : ''}" style="--image-position:${item.position};${item.image ? `background-image:url('${item.image}')` : ''}"><span class="catalogue-number">#${String(item.id).padStart(3, '0')}</span><button class="catalogue-buy" aria-label="Buy ${item.name}">Buy now</button><button class="catalogue-add" aria-label="Add ${item.name} to cart">+</button></div><h3>${item.name}</h3><div class="catalogue-meta"><span>${item.type} · ${item.flavour}</span><b>₹${item.price.toLocaleString('en-IN')}</b></div></article>`).join('');
     $$('.catalogue-add', catalogueGrid).forEach(button => button.addEventListener('click', event => { const item = event.target.closest('.catalogue-item'); cart.push({ name: item.dataset.name, price: Number(item.dataset.price) }); updateCart(); notify(`${item.dataset.name} added to your bag.`); }));
+    $$('.catalogue-buy', catalogueGrid).forEach(button => button.addEventListener('click', event => openOrder(event.target.closest('.catalogue-item').dataset.name, Number(event.target.closest('.catalogue-item').dataset.price))));
   };
   renderCatalogue('all');
   $$('.catalogue-filter').forEach(button => button.addEventListener('click', () => { $$('.catalogue-filter').forEach(item => item.classList.remove('active')); button.classList.add('active'); renderCatalogue(button.dataset.filter); }));
+
+  // Buy-now contact flow, controlled by the numbers stored in the local admin panel.
+  const orderModal = $('#order-modal');
+  const openOrder = (name, price) => { const message = encodeURIComponent(`Hello ${storeSettings.storeName}, I want to order ${name} (₹${price.toLocaleString('en-IN')}). Please confirm availability.`); $('.order-product-name').textContent = `${name} · ₹${price.toLocaleString('en-IN')}`; $('.whatsapp-order').href = `https://wa.me/${storeSettings.whatsapp}?text=${message}`; $('.call-order').href = `tel:${storeSettings.call.replace(/\s/g, '')}`; orderModal.classList.add('open'); orderModal.setAttribute('aria-hidden', 'false'); };
+  $('.order-close').addEventListener('click', () => { orderModal.classList.remove('open'); orderModal.setAttribute('aria-hidden', 'true'); });
+  orderModal.addEventListener('click', event => { if (event.target === orderModal) { orderModal.classList.remove('open'); orderModal.setAttribute('aria-hidden', 'true'); } });
 
   // Search overlay
   const search = $('.search-modal');
