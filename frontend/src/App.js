@@ -10,6 +10,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
+import AdminSettings from './pages/admin/AdminSettings';
 import { Toaster } from './components/ui/sonner';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
 
         {/* Public Routes */}
         <Route

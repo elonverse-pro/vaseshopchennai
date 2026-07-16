@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, Menu, X } from 'lucide-react';
-import { categories } from '../mockData';
+import { categories, siteSettings } from '../mockData';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,11 +19,16 @@ const Header = () => {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-[#2d2d2d] text-white py-2">
-        <div className="container mx-auto px-4 text-center text-sm">
-          WhatsApp Order is Accepted - 7877475920
+      {siteSettings.topBarEnabled && (
+        <div 
+          className="text-white py-2" 
+          style={{ backgroundColor: siteSettings.topBarBackgroundColor }}
+        >
+          <div className="container mx-auto px-4 text-center text-sm">
+            {siteSettings.topBarMessage}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -31,10 +36,14 @@ const Header = () => {
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
-              <div className="text-center">
-                <h1 className="text-2xl font-bold tracking-wide">Vape Shop</h1>
-                <p className="text-xs text-gray-600 tracking-wider">Chennai</p>
-              </div>
+              {siteSettings.logoUrl ? (
+                <img src={siteSettings.logoUrl} alt={siteSettings.siteName} className="h-12" />
+              ) : (
+                <div className="text-center">
+                  <h1 className="text-2xl font-bold tracking-wide">{siteSettings.siteName.split(' ')[0]} {siteSettings.siteName.split(' ')[1]}</h1>
+                  <p className="text-xs text-gray-600 tracking-wider">{siteSettings.siteName.split(' ')[2]}</p>
+                </div>
+              )}
             </Link>
 
             {/* Desktop Navigation */}
@@ -55,12 +64,14 @@ const Header = () => {
 
             {/* Right Icons */}
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => document.getElementById('search-dialog').classList.toggle('hidden')}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Search className="w-5 h-5" />
-              </button>
+              {siteSettings.enableSearch && (
+                <button
+                  onClick={() => document.getElementById('search-dialog').classList.toggle('hidden')}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+              )}
               <Link to="/admin" className="p-2 hover:bg-gray-100 rounded-full transition-colors hidden lg:block">
                 <User className="w-5 h-5" />
               </Link>

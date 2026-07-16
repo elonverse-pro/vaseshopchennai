@@ -149,3 +149,47 @@ export const orders = [
     createdAt: '2025-07-15T14:20:00Z'
   }
 ];
+
+export const siteSettings = {
+  // Site Information
+  siteName: 'Vape Shop Chennai',
+  siteTagline: 'Your one-stop destination for premium vapes, authentic products and unmatched quality.',
+  
+  // Top Bar
+  topBarEnabled: true,
+  topBarMessage: 'WhatsApp Order is Accepted - 7877475920',
+  topBarBackgroundColor: '#2d2d2d',
+  
+  // Contact Information
+  whatsappNumber: '917877475920',
+  phone: '7877475920',
+  alternatePhone: '',
+  email: 'info@vapeshopschennai.shop',
+  address: 'Chennai, Tamil Nadu',
+  
+  // Social Media
+  facebookUrl: 'https://facebook.com',
+  instagramUrl: 'https://instagram.com',
+  twitterUrl: 'https://twitter.com',
+  
+  // Hero Section
+  heroTitle: 'VAPE SHOP',
+  heroSubtitle: 'CHENNAI',
+  heroTagline: 'PREMIUM VAPES. AUTHENTIC EXPERIENCE.',
+  heroDescription: 'Your one-stop destination for premium vapes, authentic products and unmatched quality.',
+  heroButtonText: 'Shop Now',
+  heroBackgroundImage: 'https://images.unsplash.com/photo-1594189741508-5212175833ad?w=1920',
+  
+  // Theme Colors
+  primaryColor: '#d4af37',
+  secondaryColor: '#25D366',
+  
+  // Features
+  showWhatsAppButton: true,
+  showCallButton: true,
+  enableSearch: true,
+  
+  // Logo
+  logoUrl: '',
+  faviconUrl: ''
+};

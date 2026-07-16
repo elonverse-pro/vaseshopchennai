@@ -1,13 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
+import { siteSettings } from '../mockData';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
   const handleWhatsAppOrder = () => {
     const message = `Hi, I want to order ${product.name} - ₹${product.price}`;
-    const whatsappUrl = `https://wa.me/917877475920?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${siteSettings.whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -42,7 +43,8 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleWhatsAppOrder}
             disabled={!product.inStock}
-            className="bg-[#25D366] text-white px-4 py-2 rounded-lg hover:bg-[#20ba5a] transition-colors flex items-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="text-white px-4 py-2 rounded-lg hover:opacity-90 transition-colors flex items-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            style={{ backgroundColor: siteSettings.secondaryColor }}
           >
             <ShoppingCart className="w-4 h-4" />
             Order

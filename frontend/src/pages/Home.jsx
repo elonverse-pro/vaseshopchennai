@@ -72,7 +72,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-bold">Featured Products</h2>
-            <Link to="/category/new-arrivals" className="text-[#d4af37] hover:underline flex items-center gap-1">
+            <Link to="/category/new-arrivals" className="hover:underline flex items-center gap-1" style={{ color: siteSettings.primaryColor }}>
               View All
               <ChevronRight className="w-4 h-4" />
             </Link>
@@ -86,14 +86,27 @@ const Home = () => {
       </section>
 
       {/* WhatsApp Floating Button */}
-      <a
-        href="https://wa.me/917877475920"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#20ba5a] transition-colors z-50 hover:scale-110 transform duration-200"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </a>
+      {siteSettings.showWhatsAppButton && (
+        <a
+          href={`https://wa.me/${siteSettings.whatsappNumber}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg hover:opacity-90 transition-all z-50 hover:scale-110 transform duration-200"
+          style={{ backgroundColor: siteSettings.secondaryColor }}
+        >
+          <MessageCircle className="w-6 h-6" />
+        </a>
+      )}
+
+      {/* Call Button */}
+      {siteSettings.showCallButton && (
+        <a
+          href={`tel:${siteSettings.phone}`}
+          className="fixed bottom-24 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all z-50 hover:scale-110 transform duration-200"
+        >
+          <Phone className="w-6 h-6" />
+        </a>
+      )}
     </div>
   );
 };
