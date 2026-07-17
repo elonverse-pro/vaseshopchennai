@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, ChevronRight } from 'lucide-react';
+import { MessageCircle, ChevronRight, Phone } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../mockData';
+import { products, categories, siteSettings } from '../mockData';
 
 const Home = () => {
   const featuredProducts = products.filter(p => p.featured);
